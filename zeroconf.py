@@ -65,12 +65,14 @@ def search(name=None, type=None, domain="local"):
                 symbol, _, ip_version, name_, type_, domain_, \
                 hostname, address, port, txt = result
                 name_ = decode(name_)
-                if ip_version == "IPv4":
-                    info[(name_, type_, domain_)] = {"hostname": hostname,
-                                                     "address" : address ,
-                                                     "port"    : port    ,
-                                                     "txt"     : txt     }
-    
+                if ip_version not in [ 'IPv4', 'IPv6' ]:
+                    continue
+                if re.match(r'^fe80', address) is not None:
+                    continue
+                info[(name_, type_, domain_)] = {"hostname"  : hostname,
+                                                 "address"   : address ,
+                                                 "port"      : port    ,
+                                                 "txt"       : txt     }
 
         
     elif sys.platform.startswith("win"):  
