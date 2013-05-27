@@ -65,9 +65,13 @@ def search(name=None, type=None, domain="local"):
                 symbol, _, ip_version, name_, type_, domain_, \
                 hostname, address, port, txt = result
                 name_ = decode(name_)
-                if ip_version not in [ 'IPv4', 'IPv6' ]:
-                    continue
-                if re.match(r'^fe80', address) is not None:
+                # avahi-browse reports 'n/a' ip_version for wide-area DNS-SD
+                if ip_version == 'n/a' and domain_ != 'local':
+                    pass
+                elif ip_version in [ 'IPv4', 'IPv6' ]:
+                    if address.find('fe80') == 0:
+                        continue
+                else:
                     continue
                 info[(name_, type_, domain_)] = {"hostname"  : hostname,
                                                  "address"   : address ,
