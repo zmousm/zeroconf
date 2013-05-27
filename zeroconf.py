@@ -159,7 +159,7 @@ Input strings in unicode are ok as long as they belong to the ascii range:
         if numeric:
             return chr(int(numeric[1:]))
         else:
-            return other
+            return other[1:]
 
     return re.sub(r"(\\\d\d\d)|(\\.)", replace, text)
 
